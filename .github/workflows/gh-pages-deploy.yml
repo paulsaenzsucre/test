@@ -6,11 +6,6 @@ jobs:
   gh-page-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Configure Git identity
-        run: |
-          git config user.email "${{ secrets.GIT_USER_EMAIL }}"
-          git config user.name "${{ secrets.GIT_USER_NAME }}"
-
       - name: Setup Node.js for use with actions
         uses: actions/setup-node@v3
         with:
@@ -23,6 +18,11 @@ jobs:
 
       - name: Checkout branch
         uses: actions/checkout@v3
+
+      - name: Configure Git identity
+        run: |
+          git config user.email "${{ secrets.GIT_USER_EMAIL }}"
+          git config user.name "${{ secrets.GIT_USER_NAME }}"
 
       - name: Clean install dependencies
         run: pnpm install
