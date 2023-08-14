@@ -1,0 +1,21 @@
+name: gh-deploy
+on: [push]
+permissions:
+  contents: write
+jobs:
+  gh-page-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js for use with actions
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Clean install dependencies
+        run: pnpm install
+
+      - name: Run deploy script
+        run: bash scripts/gh-pages-deploy.sh
