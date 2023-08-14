@@ -1,12 +1,10 @@
 name: gh-deploy
-on:
-  push:
-    branches:
-      - main
+on: [push]
 permissions:
   contents: write
 jobs:
-  gh-page-deploy:
+  # Setup job:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js for use with actions
@@ -30,5 +28,46 @@ jobs:
       - name: Clean install dependencies
         run: pnpm install
 
-      - name: Run deploy script
-        run: bash scripts/gh-pages-deploy.sh
+  #Build job:
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build the project
+        run: |
+          current_branch=$(git rev-parse --abbrev-ref HEAD)
+          git checkout --orphan gh-pages
+          pnpm build
+      
+      - name: Use the Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-pages
+          path: dist
+
+      - name: Clean up
+        run: |
+          rm -r dist
+          git checkout -f "$current_branch"
+          git branch -D gh-pages
+  
+  #Deploy job
+  deploy:
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write
+      id-token: write
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
