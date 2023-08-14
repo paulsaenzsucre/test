@@ -11,11 +11,16 @@ jobs:
         with:
           node-version: 18
 
+      - name: Setup pnpm for use with actions
+        uses: pnpm/action-setup@v2.4.0
+        with:
+          version: latest
+
       - name: Checkout branch
         uses: actions/checkout@v3
 
       - name: Clean install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Run deploy script
         run: bash scripts/gh-pages-deploy.sh
