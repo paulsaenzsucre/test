@@ -1,5 +1,11 @@
 name: gh-deploy
-on: [push]
+on:
+  push:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -30,7 +36,7 @@ jobs:
           git config user.email "${{ secrets.GIT_USER_EMAIL }}"
           git config user.name "${{ secrets.GIT_USER_NAME }}"
 
-      - name: Clean install dependencies
+      - name: Install dependencies
         run: pnpm install
 
       - name: Build the project
