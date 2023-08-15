@@ -3,8 +3,8 @@ on: [push]
 permissions:
   contents: write
 jobs:
-  # Setup job:
-  setup:
+  #Build job:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js for use with actions
@@ -27,12 +27,6 @@ jobs:
 
       - name: Clean install dependencies
         run: pnpm install
-
-  #Build job:
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
       - name: Build the project
         run: |
           current_branch=$(git rev-parse --abbrev-ref HEAD)
