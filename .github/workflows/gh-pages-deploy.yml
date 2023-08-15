@@ -32,9 +32,9 @@ jobs:
         run: |
           echo "current_branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
           git checkout --orphan gh-pages
+          git branch --list
           pnpm build
           git branch --list
-          git rev-parse --abbrev-ref HEAD
       
       - name: Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
