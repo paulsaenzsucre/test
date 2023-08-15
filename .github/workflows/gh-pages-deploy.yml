@@ -33,6 +33,8 @@ jobs:
           echo "current_branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
           git checkout --orphan gh-pages
           pnpm build
+          git branch --list
+          git rev-parse --abbrev-ref HEAD
       
       - name: Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
@@ -42,6 +44,8 @@ jobs:
 
       - name: Clean up
         run: |
+          git branch --list
+          git rev-parse --abbrev-ref HEAD
           rm -r dist
           git checkout -f "$current_branch"
           git branch -D gh-pages
