@@ -29,30 +29,13 @@ jobs:
         run: pnpm install
 
       - name: Build the project
-        run: |
-          echo "current_branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-          git checkout --orphan gh-pages
-          git branch --show-current
-          git branch --all
-          pnpm build
-          git branch --show-current
-          git branch --all
+        run: pnpm build
       
       - name: Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
         with:
           name: github-pages
           path: dist
-
-      - name: Clean up
-        run: |
-          git branch --show-current
-          git branch --all
-          rm -r dist
-          git checkout -f "$current_branch"
-          git branch --show-current
-          git branch --all
-          git branch -D gh-pages
   
   #Deploy job
   deploy:
