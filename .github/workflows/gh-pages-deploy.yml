@@ -36,7 +36,7 @@ jobs:
           git branch --all
           pnpm build
           git branch --show-current
-          git branch --lall
+          git branch --all
       
       - name: Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
